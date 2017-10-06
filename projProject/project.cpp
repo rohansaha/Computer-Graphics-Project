@@ -1,9 +1,9 @@
 /*===================================================================================================
-PROGRAMMER:				Rohan Saha, Matt
-COURSE:					CSC 625 Computer Graphics
+PROGRAMMER:				Matt Revell and Rohan Saha
+COURSE:					CSC 525/625 Computer Graphics
 MODIFIED BY:			N/A
 LAST MODIFIED DATE:		10/16/2017
-DESCRIPTION:			Demo: 2D rendering 
+DESCRIPTION:			Demo: 2D Object Rendering 
 NOTE:					N/A
 FILES:					project.cpp, (projProject.sln, ...)
 IDE/COMPILER:			MicroSoft Visual Studio 2017
