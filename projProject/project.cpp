@@ -20,7 +20,7 @@ g++ -o project project.cpp -lglut -lGLU -lGL
 #include <math.h>
 #include <GL/glut.h>
 
-
+// Draws a door
 void drawDoor() {
     glLineWidth(2.5);
     glColor3f(0, 0, 0);
@@ -32,7 +32,7 @@ void drawDoor() {
     glEnd();
 }
 
-
+// Puts some text on the screen
 void drawHouseNumber() {
     glColor3f(0, 0, 0);
     glRasterPos2f(-7, -220);
@@ -60,14 +60,14 @@ void filledInCircle(int x, int y, GLfloat radius) {
     glEnd();
 }
 
-
+// Draws 2 windows
 void drawWindows() {
     glColor3f(.2, .4, 0);
     filledInCircle(-100, -75, 20);
     filledInCircle(100, -75, 20);
 }
 
-
+// Draws a house
 void drawHouse() {
     glColor3f(0, .2, .4);
     glBegin(GL_POLYGON);
