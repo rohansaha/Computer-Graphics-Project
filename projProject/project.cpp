@@ -20,6 +20,26 @@ g++ -o project project.cpp -lglut -lGLU -lGL
 #include <math.h>
 #include <GL/glut.h>
 
+
+GLubyte bird[] = {
+    0x80, 0x01,     // Row 1
+    0x40, 0x02,     // Row 2
+    0x23, 0xC4,     // Row 3
+    0x24, 0x24,     // Row 4
+    0x14, 0x28,     // Row 5
+    0x08, 0x10,     // Row 6
+    0x00, 0x00,     // Row 7
+};
+
+// Draws a bird at the given x and y coordinates
+void drawBird(int x, int y) {
+    glPixelStorei (GL_UNPACK_ALIGNMENT, 1);     // Only read one byte at a time
+    glColor3f(0, 0, 0);
+    glRasterPos2i(x, y);
+    glBitmap(16, 7, 0, 0, 0, 0, bird);
+}
+
+
 // Draws a door
 void drawDoor() {
     glLineWidth(2.5);
@@ -91,6 +111,9 @@ void myDisplayCallback() {
     drawWindows();
     drawDoor();
     drawHouseNumber();
+    drawBird(100, 100);
+    drawBird(130, 200);
+    drawBird(-75, 150);
 	glFlush();
 }
 
