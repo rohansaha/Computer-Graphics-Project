@@ -91,8 +91,7 @@ void readFromFile(string fileInfo, GLubyte numbers[512][512][3]){
 
 	if (!fin)
 	{
-		cerr << "Unable to open file ";
-		exit(0);   // call system to stop
+		cerr << "Unable to open " << fileInfo;
 	}
 
 	for (int i = 0; i < 512; i++)
