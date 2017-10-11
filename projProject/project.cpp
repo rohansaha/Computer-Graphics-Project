@@ -25,31 +25,34 @@ using namespace std;
 
 //******* Function Prototype *********************************************************
 void drawPolygon();
+void writeToFile();
 void drawCircle(float x, float y, int radius);
 void filledInCircle(int x, int y, GLfloat radius);
 
 //******* Global Variable *********************************************************
 GLubyte pixelMap[512][512][3];
+GLubyte readPixelMap[512][512][3];
 int height = 512;
 int width = 512;
 
+
 // bitmap pattern for house 
 GLubyte pattern1[] = {
-	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 
-	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 
-	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 
-	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 
-	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 
-	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 
-	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 
-	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 
-	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 
-	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 
-	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 
-	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 
-	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 
+	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
 	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 
 // bitmap pattern for door 
@@ -83,9 +86,9 @@ GLubyte bird[] = {
 };
 
 //******* Function Definitions *********************************************************
-void readFromFile(string fileInfo, GLubyte numbers[512][512][3]){
+void readFromFile() {
 	ifstream fin;
-
+	string fileInfo = "background.bin";
 	// open a file
 	fin.open(fileInfo, ios::binary);
 
@@ -94,27 +97,24 @@ void readFromFile(string fileInfo, GLubyte numbers[512][512][3]){
 		cerr << "Unable to open " << fileInfo;
 	}
 
-	for (int i = 0; i < 512; i++)
+	for (int i = 0; i < height; i++)
 	{
-		for (int j = 0; j < 512; j++)
+		for (int j = 0; j < width; j++)
 		{
 			for (int k = 0; k < 3; k++)
 			{
-				fin.read((char*)&numbers[i][j][k], sizeof(GLubyte));
+				fin.read((char*)&pixelMap[i][j][k], sizeof(GLubyte));
 			}
 		}
 	}
-
 	// deallocates memory for fin
 	fin.close();
 }
 
 // Draws background image
-void drawBackground(){
-	string fileName = "C:\\TEMP\\savedImg.bin";
-
+void drawBackground() {
 	// reads the binary file
-	readFromFile(fileName, pixelMap);
+	readFromFile();
 
 	//sets the raster position
 	glRasterPos2f(-250, -250);
@@ -143,17 +143,16 @@ void drawPolygon() {
 	glEnd();
 }
 
-
 // Draws a door
 void drawDoor() {
 	//Draws frame for the door
-    glColor3f(0, 0, 0);
-    glBegin(GL_LINE_STRIP);
+	glColor3f(0, 0, 0);
+	glBegin(GL_LINE_STRIP);
 	glVertex2i(-50, -200);
 	glVertex2i(-50, -60);
 	glVertex2i(50, -60);
 	glVertex2i(50, -200);
-    glEnd();
+	glEnd();
 
 	//Draws door surface
 	glColor3f(0.502, 0.000, 0.000);			//maroon
@@ -166,7 +165,7 @@ void drawDoor() {
 	glEnd();
 
 	//Draws pattern for data
-	glEnable(GL_POLYGON_STIPPLE);				
+	glEnable(GL_POLYGON_STIPPLE);
 	glColor3f(0.467, 0.533, 0.600);			//light state blue
 	glPolygonStipple(pattern2);
 	glBegin(GL_POLYGON);
@@ -184,39 +183,38 @@ void drawDoor() {
 
 // Puts some text on the screen
 void drawHouseNumber() {
-    glColor3f(1.000, 1.000, 0.878);		// light yellow
-    glRasterPos2f(-20, -50);
-    string house_num = "101";
-    for(int i=0; i<house_num.size(); i++) {
-        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, house_num.at(i));
-    }
+	glColor3f(1.000, 1.000, 0.878);		// light yellow
+	glRasterPos2f(-20, -50);
+	string house_num = "1001";
+	for (int i = 0; i < house_num.size(); i++) {
+		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, house_num.at(i));
+	}
 }
 
 
 void filledInCircle(int x, int y, GLfloat radius) {
-    // Filled in circle code taken from https://gist.github.com/linusthe3rd/803118
-    // Color must be set before calling this method
-    GLfloat twicePi = 2.0f * 3.14159;
-    int triangleAmount = 500;
+	// Filled in circle code taken from https://gist.github.com/linusthe3rd/803118
+	// Color must be set before calling this method
+	GLfloat twicePi = 2.0f * 3.14159;
+	int triangleAmount = 500;
 
 	glBegin(GL_TRIANGLE_FAN);
-    glVertex2i(x, y);
-    for(int i=0; i<triangleAmount; i++) {
-        glVertex2f(
-            x + ( radius * cos( i * twicePi / triangleAmount )),
-            y + ( radius * sin( i * twicePi / triangleAmount ))
-        );
-    }
-    glEnd();
+	glVertex2i(x, y);
+	for (int i = 0; i < triangleAmount; i++) {
+		glVertex2f(
+			x + (radius * cos(i * twicePi / triangleAmount)),
+			y + (radius * sin(i * twicePi / triangleAmount))
+		);
+	}
+	glEnd();
 }
 
 //Draws frame for windows
-void drawCircle(float xC, float yC, int radius)
-{
+void drawCircle(float xC, float yC, int radius) {
 	const float pi = 3.141592653f;			// constant PI value
-	for (float angle = 0; angle <= 2 * pi; angle += 0.01)	{
+	for (float angle = 0; angle <= 2 * pi; angle += 0.01) {
 		glBegin(GL_POINTS);					// uses points to draw face
-			glVertex2f(xC + (radius*cos(angle)), yC + (radius*sin(angle)));				// draw the vertex point at the specified co-ordinate
+		glVertex2f(xC + (radius*cos(angle)), yC + (radius*sin(angle)));				// draw the vertex point at the specified co-ordinate
 		glEnd();
 	}
 }
@@ -236,24 +234,16 @@ void drawWindows() {
 
 	glLineWidth(2.5);
 	// draws window pane
-	glColor3f(0, 0, 0); // color black
+	glColor3f(0, 0, 0);					// color black
 	glBegin(GL_LINE_STRIP);
-	glVertex2i(-148,-15);
+	glVertex2i(-148, -15);
 	glVertex2i(-52, -15);
 	glEnd();
-	/*glBegin(GL_LINE_STRIP);
-	glVertex2i(-100, 33);
-	glVertex2i(-100, -63);
-	glEnd();*/
 
 	glBegin(GL_LINE_STRIP);
 	glVertex2i(52, -15);
 	glVertex2i(148, -15);
 	glEnd();
-	/*glBegin(GL_LINE_STRIP);
-	glVertex2i(100, 33);
-	glVertex2i(100, -63);
-	glEnd();*/
 }
 
 // Draws bird at x, y location
@@ -264,6 +254,38 @@ void drawBird(int x, int y) {
 	glBitmap(16, 7, 0, 0, 0, 0, bird);
 }
 
+//Stores final image to binary file
+void storeImage() {
+	glReadPixels(50, 50, width, height, GL_RGB, GL_UNSIGNED_BYTE, readPixelMap);
+	writeToFile();
+}
+
+void writeToFile() {
+	ofstream fout;
+	string fileInfo = "C:\\TEMP\\savedImg.bin";
+	// 1. open a file
+	fout.open(fileInfo, ios::binary);
+	if (!fout)
+	{
+		cerr << "Unable to open file savedImg.bin";
+	}
+
+	// 2. write to the file
+	for (int i = 0; i < height; i++)
+	{
+		for (int j = 0; j < width; j++)
+		{
+			for (int k = 0; k < 3; k++)
+			{
+				fout.write((char *)&readPixelMap[i][j][k], sizeof(GLubyte));
+			}
+		}
+	}
+
+	// 3. wrap up
+	fout.close();
+}
+
 void myInit() {
 	glClearColor(1, 1, 1, 0);			// specify a background clor: white
 	gluOrtho2D(-300, 300, -300, 300);	// specify a viewing area
@@ -272,20 +294,21 @@ void myInit() {
 void myDisplayCallback() {
 	glClear(GL_COLOR_BUFFER_BIT);
 	drawBackground();
-    drawHouse();
-    drawWindows();
-    drawDoor();
-    drawHouseNumber();
+	drawHouse();
+	drawWindows();
+	drawDoor();
+	drawHouseNumber();
 	drawBird(-200, 200);
 	drawBird(200, 200);
 	drawBird(-100, 150);
 	drawBird(100, 150);
+	storeImage();
 	glFlush();
 }
 
 
 int main(int argc, char ** argv) {
-	glutInit(& argc, argv);					// optional in our environment
+	glutInit(&argc, argv);					// optional in our environment
 
 	glutInitWindowSize(600, 600);				// specify a window size
 	glutInitWindowPosition(100, 0);				// specify a window position
@@ -297,5 +320,5 @@ int main(int argc, char ** argv) {
 
 	glutMainLoop();					        // get into an infinite loop
 
-    return 0;
+	return 0;
 }
