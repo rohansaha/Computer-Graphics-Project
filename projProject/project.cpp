@@ -21,8 +21,6 @@ g++ -o project project.cpp -lglut -lGLU -lGL
 #include <math.h>			// includes math lib
 #include <GL/glut.h>		// includes glut lib
 
-using namespace std;
-
 //******* Function Prototype *********************************************************
 void drawPolygon();
 void writeToFile();
@@ -87,14 +85,14 @@ GLubyte bird[] = {
 
 //******* Function Definitions *********************************************************
 void readFromFile() {
-	ifstream fin;
-	string fileInfo = "background.bin";
+	std::ifstream fin;
+	std::string fileInfo = "background.bin";
 	// open a file
-	fin.open(fileInfo, ios::binary);
+	fin.open(fileInfo, std::ios::binary);
 
 	if (!fin)
 	{
-		cerr << "Unable to open " << fileInfo;
+		std::cerr << "Unable to open " << fileInfo;
 	}
 
 	for (int i = 0; i < height; i++)
@@ -185,7 +183,7 @@ void drawDoor() {
 void drawHouseNumber() {
 	glColor3f(1.000, 1.000, 0.878);		// light yellow
 	glRasterPos2f(-20, -50);
-	string house_num = "1001";
+	std::string house_num = "101";
 	for (int i = 0; i < house_num.size(); i++) {
 		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, house_num.at(i));
 	}
@@ -261,13 +259,13 @@ void storeImage() {
 }
 
 void writeToFile() {
-	ofstream fout;
-	string fileInfo = "C:\\TEMP\\savedImg.bin";
+	std::ofstream fout;
+	std::string fileInfo = "C:\\TEMP\\savedImg.bin";
 	// 1. open a file
-	fout.open(fileInfo, ios::binary);
+	fout.open(fileInfo, std::ios::binary);
 	if (!fout)
 	{
-		cerr << "Unable to open file savedImg.bin";
+		std::cerr << "Unable to open file savedImg.bin";
 	}
 
 	// 2. write to the file
