@@ -28,10 +28,10 @@ void drawCircle(float x, float y, int radius);
 void filledInCircle(int x, int y, GLfloat radius);
 
 //******* Global Variable *********************************************************
-GLubyte pixelMap[512][512][3];
+GLubyte pixelMap[600][600][3];
 GLubyte readPixelMap[512][512][3];
-int height = 512;
-int width = 512;
+int height = 600;
+int width = 600;
 
 
 // bitmap pattern for house 
@@ -115,7 +115,7 @@ void drawBackground() {
 	readFromFile();
 
 	//sets the raster position
-	glRasterPos2f(-250, -250);
+	glRasterPos2f(-300, -300);
 
 	// draws the pixels
 	glDrawPixels(width, height, GL_RGB, GL_UNSIGNED_BYTE, pixelMap);
@@ -254,7 +254,7 @@ void drawBird(int x, int y) {
 
 //Stores final image to binary file
 void storeImage() {
-	glReadPixels(50, 50, width, height, GL_RGB, GL_UNSIGNED_BYTE, readPixelMap);
+	glReadPixels(50, 50, 512, 512, GL_RGB, GL_UNSIGNED_BYTE, readPixelMap);
 	writeToFile();
 }
 
@@ -269,9 +269,9 @@ void writeToFile() {
 	}
 
 	// 2. write to the file
-	for (int i = 0; i < height; i++)
+	for (int i = 0; i < 512; i++)
 	{
-		for (int j = 0; j < width; j++)
+		for (int j = 0; j < 512; j++)
 		{
 			for (int k = 0; k < 3; k++)
 			{
