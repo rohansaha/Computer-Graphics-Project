@@ -1,7 +1,18 @@
 /*===================================================================================================
-PROGRAMMER:				Matt Revell and Rohan Saha
-COURSE:					CSC 525/625 Computer Graphics
-MODIFIED BY:			N/A
+PROGRAMMER:			Matt Revell and Rohan Saha
+COURSE:				CSC 525/625 Computer Graphics
+MODIFIED BY:			1. Matt Revell (50%)
+					a. Design
+					b. Bitmap for Birds
+					c. Circles for Windows
+					d. Lines for Door
+					e. Text
+				2. Rohan Saha (50%)
+					a. Background PixelMap
+					b. Polygon for House
+					c. House Polygon Stipple
+					d. Door Polygon Stipple
+					e. Window Design
 LAST MODIFIED DATE:		10/16/2017
 DESCRIPTION:			Project 1
 NOTE:					N/A
